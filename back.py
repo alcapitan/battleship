@@ -2,6 +2,7 @@ from random import randint
 
 def createEmptyTable(size):
      """The table is a square."""
+     size = int(size)
      table = [[0 for x in range(size)] for y in range(size)]
      return table
 
@@ -25,6 +26,7 @@ def displayTable(table,view):
 def prepareTable(size,nbBoats):
      """Create an empty table, then put boats on the table."""
      table = createEmptyTable(size)
+     nbBoats = int(nbBoats)
      for player in range(1,3):
           boats = 0
           while boats < nbBoats:
@@ -67,10 +69,18 @@ def destroyBoat(table,player,x,y):
      else:
           return "error"
 
+def someoneWon(boats):
+     """Return if someone won, if it's yes, so return who"""
+     if 0 in boats:
+          who = boats.index(0)
+          return who
+     else:
+          return None
+
 def run():
      size = input("How size for the grid : ")
      nbBoats = input("How many boats per player : ")
-     boats = (nbBoats,nbBoats)
+     boats = [nbBoats for player in range(2)]
      gameRun = True
      table = prepareTable(size,nbBoats)
      player = randint(0,1)
@@ -78,11 +88,26 @@ def run():
           print(f"Player {player} is going to play.")
           displayTable(table,player)
           position = shoot()
-          result = boatHere(table,player,position)
-          if result == "opposite":
+          outcome = boatHere(table,player,position)
+          if outcome == "opposite":
+               if player == 0:
+                    boats[1] -= 1
+               elif player == 1:
+                    boats[0] -= 1
+               else:
+                    return None
                print("You have destoyed an opposite boat.")
-          elif result == "same":
+          elif outcome == "same":
+               boats[view] -= 1
                print("You have destoyed one of your own boats.")
-          elif result == "empty":
+          elif outcome == "empty":
                print("You have not destoyed anything.")
+     result = someoneWon(boats)
+     if result == None:
+          pass
+     elif type(result) == "int":
+          print(f"Player {result} won !")
+          gameRun = False
+          return
 
+run()
