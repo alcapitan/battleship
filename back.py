@@ -1,7 +1,16 @@
 from random import randint
 
+def error(message):
+    """
+          Display an agreable error.
+    """
+    text = "Error :",message
+    return text
+
 def createEmptyTable(size):
-     """The table is a square."""
+     """
+          The table is a square.
+     """
      size = int(size)
      table = [[0 for x in range(size)] for y in range(size)]
      return table
@@ -25,7 +34,9 @@ def displayTable(table,view):
      print()
 
 def prepareTable(size,nbBoats):
-     """Create an empty table, then put boats on the table."""
+     """
+          Create an empty table, then put boats on the table.
+     """
      table = createEmptyTable(size)
      nbBoats = int(nbBoats)
      for player in range(1,3):
@@ -45,8 +56,8 @@ def boatHere(table,player,position):
           position is a tuple. First is x (left - right), and second is y (top - bottom)
           Remember in Python, lists start from 0. So remember to move 1 from the position !
      """
-     x = int(position[0])
-     y = int(position[1])
+     x = position[0]
+     y = position[1]
      if (table[y][x] != player) and (table[y][x] != 0):
           return "opposite"
      elif table[y][x] == player:
@@ -54,16 +65,21 @@ def boatHere(table,player,position):
      elif table[y][x] == 0:
           return "empty"
      else:
-          return None
+          print(error("Retire boat"))
+          return
 
 def shoot():
-     """Shoot on a position"""
-     x = input("x : ")
-     y = input("y : ")
+     """
+          Shoot on a position
+     """
+     x = int(input("x : "))
+     y = int(input("y : "))
      return (x,y)
 
 def destroyBoat(table,player,x,y):
-     """Remove a opposite boat"""
+     """
+          Remove a opposite boat
+     """
      if boatHere(table,player,x,y) == "opposite":
           table[x][y] = 0
           return "success"
@@ -71,7 +87,9 @@ def destroyBoat(table,player,x,y):
           return "error"
 
 def someoneWon(boats):
-     """Return if someone won, if it's yes, so return who"""
+     """
+          Return if someone won, if it's yes, so return who
+     """
      if 0 in boats:
           who = boats.index(0)
           return who
@@ -79,8 +97,10 @@ def someoneWon(boats):
           return None
 
 def run():
-     size = input("How size for the grid : ")
-     nbBoats = input("How many boats per player : ")
+     # size = input("How size for the grid : ")
+     # nbBoats = input("How many boats per player : ")
+     size = 10
+     nbBoats = 10
      boats = [nbBoats for player in range(2)]
      gameRun = True
      table = prepareTable(size,nbBoats)
@@ -96,7 +116,8 @@ def run():
                elif player == 1:
                     boats[0] -= 1
                else:
-                    return None
+                    print(error("Retire boat"))
+                    return
                print("You have destoyed an opposite boat.")
           elif outcome == "same":
                boats[player] -= 1
@@ -108,7 +129,8 @@ def run():
           elif player == 2:
                player = 1
           else:
-               return None
+               print(error("Player switch"))
+               return
      result = someoneWon(boats)
      if result == None:
           pass
