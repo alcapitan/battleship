@@ -14,13 +14,14 @@ def displayTable(table,view):
      for y in range(len(table)):
           for x in range(len(table)):
                if view == None:
-                    print(f"{table[y][x]} ")
+                    print(f"{table[y][x]} ",end="")
                elif table[y][x] == view:
-                    print(f"{view} ")
+                    print(f"{view} ",end="")
                elif table[y][x] != view:
-                    print("0 ")
+                    print("0 ",end="")
                else:
                     return None
+          print()
      print()
 
 def prepareTable(size,nbBoats):
@@ -44,8 +45,8 @@ def boatHere(table,player,position):
           position is a tuple. First is x (left - right), and second is y (top - bottom)
           Remember in Python, lists start from 0. So remember to move 1 from the position !
      """
-     x = position[0]
-     y = position[1]
+     x = int(position[0])
+     y = int(position[1])
      if (table[y][x] != player) and (table[y][x] != 0):
           return "opposite"
      elif table[y][x] == player:
@@ -83,7 +84,7 @@ def run():
      boats = [nbBoats for player in range(2)]
      gameRun = True
      table = prepareTable(size,nbBoats)
-     player = randint(0,1)
+     player = randint(1,2)
      while gameRun:
           print(f"Player {player} is going to play.")
           displayTable(table,player)
@@ -98,10 +99,16 @@ def run():
                     return None
                print("You have destoyed an opposite boat.")
           elif outcome == "same":
-               boats[view] -= 1
+               boats[player] -= 1
                print("You have destoyed one of your own boats.")
           elif outcome == "empty":
                print("You have not destoyed anything.")
+          if player == 1:
+               player = 2
+          elif player == 2:
+               player = 1
+          else:
+               return None
      result = someoneWon(boats)
      if result == None:
           pass
