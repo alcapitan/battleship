@@ -54,7 +54,7 @@ def main():
     ecran,resolEcran=surface()
     tourJoueur=True
     tourJoueur2=False
-    grille = back.prepareTable(10, 10)
+    grille = back.prepareGrid(10, 10)
 
     joueur1=1
     joueur2=2
@@ -100,13 +100,23 @@ def main():
                         if outcome == "opposite":
                             bateaux[1] -= 1
                             grille[joueur1PosY][joueur1PosX]=0
+                            ecran.fill(blanc)
+                            ecran = plateau(ecran, resolEcran, grille, joueur1)
+                            ecran.blit(texteTouche, (resolEcran[0] * 7 / 10, 10))
+                            pygame.display.flip()
                         elif outcome=="same":
                             bateaux[0] -= 1
                             grille[joueur1PosY][joueur1PosX] = 0
-                        ecran.fill(blanc)
-                        ecran.blit(texteJ1, [resolEcran[1]/2, 50])
-                        ecran= plateau(ecran,resolEcran,grille,joueur1)
-                        pygame.display.flip()
+                            ecran.fill(blanc)
+                            ecran= plateau(ecran, resolEcran, grille, joueur1)
+                            ecran.blit(texteFail, (resolEcran[0] * 7 / 10, 10))
+                            pygame.display.flip()
+                        else:
+                            ecran.fill(blanc)
+                            ecran = plateau(ecran, resolEcran, grille, joueur1)
+                            ecran.blit(texteRien,(resolEcran[0]*7/10,10))
+                            pygame.display.flip()
+
 
                         gagnant = back.someoneWon(bateaux)
                         if gagnant != None:
@@ -145,14 +155,24 @@ def main():
                         if outcome == "opposite":
                             bateaux[0] -= 1
                             grille[joueur2PosY][joueur2PosX]=0
+                            ecran.fill(blanc)
+                            ecran.blit(texteTouche2, (resolEcran[0] * 7 / 10, 10))
+                            ecran = plateau(ecran, resolEcran, grille, joueur2)
+                            pygame.display.flip()
 
                         elif outcome=="same":
                             bateaux[1] -= 1
                             grille[joueur2PosY][joueur2PosX] = 0
-                        ecran.fill(blanc)
-                        ecran.blit(texteJ2, [resolEcran[1]/2, 50])
-                        ecran = plateau(ecran,resolEcran,grille,joueur2)
-                        pygame.display.flip()
+                            ecran.fill(blanc)
+                            ecran.blit(texteFail2,(resolEcran[0]*7/10,10))
+                            ecran = plateau(ecran, resolEcran, grille, joueur2)
+                            pygame.display.flip()
+                        else:
+                            ecran.fill(blanc)
+                            ecran.blit(texteRien2, (resolEcran[0] * 7 / 10, 10))
+                            ecran = plateau(ecran, resolEcran, grille, joueur2)
+                            pygame.display.flip()
+
 
                         gagnant=back.someoneWon(bateaux)
                         if gagnant!=None:
@@ -162,7 +182,9 @@ def main():
                             tourJoueur2 = False
                             tourJoueur = True
         sleep(2)
-        
-
-                    
-main()     
+    texteGagnant=arial_font.render((f"Le gagnant est le joueur {gagnant}"),True,noir)
+    ecran.fill(blanc)
+    ecran.blit(texteGagnant,(resolEcran[0]/2,resolEcran[1]/2))
+    pygame.display.flip()
+    sleep(3)
+main()
