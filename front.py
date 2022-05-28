@@ -1,5 +1,4 @@
 import pygame
-import back
 from sys import exit
 from time import sleep
 pygame.init()
