@@ -1,4 +1,5 @@
 import pygame
+import back
 from sys import exit
 from time import sleep
 pygame.init()
@@ -152,7 +153,7 @@ def main():
                             pygame.display.flip()
 
 
-                        gagnant = back.someoneWon(bateaux)
+                        gagnant = someoneWon(bateaux)
                         if gagnant != None:
                             tourJoueur = False
                         else:
