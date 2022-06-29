@@ -184,5 +184,3 @@ def run():
 		grid = destroyShip(grid,position)
 		someoneWon(ships)
 		player = changePlayer(player)
-
-run()
