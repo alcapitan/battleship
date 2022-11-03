@@ -125,6 +125,14 @@ def shoot(size):
 	print()
 	return (x,y)
 
+def autoshot(size):
+	assert type(size) is int, "type of size must be int"
+	posx = randint(0,size)
+	posy = randint(0,size)
+	print()
+	return (x,y)
+
+
 def destroyShip(grid,position):
 	"""
 		Remove a ship from the grid
@@ -179,7 +187,7 @@ def run():
 		# This while bucle represents a round
 		print(f"Player {player} is going to play. \n")
 		displayGrid(grid,player)
-		position = shoot(size)
+		position = autoshoot(size)
 		ships = shipHere(grid,player,position,ships)
 		grid = destroyShip(grid,position)
 		someoneWon(ships)

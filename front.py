@@ -2,6 +2,7 @@ import pygame
 import back
 from sys import exit
 from time import sleep
+from random import randint
 pygame.init()
 
 def someoneWon(ships):
@@ -40,8 +41,8 @@ def boatHere(table, player, position):
 def surface():
     ecran=pygame.display.set_mode()
     (x,y)=ecran.get_size()
-    pygame.display.set_caption("Touché Coulé")
-    ecran=pygame.display.set_mode((x,y))
+    pygame.display.set_caption("Bataille navale")
+    ecran=pygame.display.set_mode((x,y), pygame.FULLSCREEN)
 
     return (ecran,(x,y))
 
@@ -99,17 +100,17 @@ def main():
 #------------------côté pygame------------------------------
     
     arial_font = pygame.font.SysFont("arial", 50)
-    texteJ1=arial_font.render("C'est le tour du joueur 1",True,noir)
-    texteJ2=arial_font.render("C'est le tour du joueur 2",True,noir)
-    texteTouche2=arial_font.render("Le Joueur 2 a touché un bateau du joueur 1",True,noir)
-    texteTouche=arial_font.render("Le Joueur 1 a touché un bateau du joueur 2",True,noir)
-    texteFail=arial_font.render("Le Joueur 1 a touché son propre bateau ",True,noir)
-    texteFail2=arial_font.render("Le Joueur 2 a touché son propre bateau ",True,noir)
-    texteRien=arial_font.render("Le joueur 1 a râté son tir",True,noir)
-    texteRien2=arial_font.render("Le joueur 2 a râté son tir",True,noir)
+    texteJ1=arial_font.render("À vous de jouer.",True,noir)
+    texteJ2=arial_font.render("L'adversaire joue.",True,noir)
+    texteTouche2=arial_font.render("L'adversaire a touché un de vos bateaux.",True,noir)
+    texteTouche=arial_font.render("Vous avez touché un bateau de l'adversaire.",True,noir)
+    texteFail=arial_font.render("Vous avez touché un de vos propres bateaux.",True,noir)
+    texteFail2=arial_font.render("L'adversaire a touché un de ses propres bateaux.",True,noir)
+    texteRien=arial_font.render("Vous n'avez pas touché de bateaux.",True,noir)
+    texteRien2=arial_font.render("L'adversaire n'a pas touché de bateaux.",True,noir)
     while enCours:
         ecran.fill(blanc)
-        ecran.blit(texteJ1, [resolEcran[1] / 2, 50])
+        ecran.blit(texteJ1, [50, 45])
         ecran = plateau(ecran, resolEcran, grille, joueur1)
         pygame.display.flip()
 #----------------Tour joueur 1----------------------
@@ -137,19 +138,19 @@ def main():
                             grille[joueur1PosY][joueur1PosX]=0
                             ecran.fill(blanc)
                             ecran = plateau(ecran, resolEcran, grille, joueur1)
-                            ecran.blit(texteTouche, (resolEcran[1]/2, 50))
+                            ecran.blit(texteTouche, (50,45))
                             pygame.display.flip()
                         elif outcome=="same":
                             bateaux[0] -= 1
                             grille[joueur1PosY][joueur1PosX] = 0
                             ecran.fill(blanc)
                             ecran= plateau(ecran, resolEcran, grille, joueur1)
-                            ecran.blit(texteFail, (resolEcran[1]/2, 50))
+                            ecran.blit(texteFail, (50,45))
                             pygame.display.flip()
                         else:
                             ecran.fill(blanc)
                             ecran = plateau(ecran, resolEcran, grille, joueur1)
-                            ecran.blit(texteRien,(resolEcran[1]/2, 50))
+                            ecran.blit(texteRien,(50,45))
                             pygame.display.flip()
 
 
@@ -161,13 +162,13 @@ def main():
                             tourJoueur2 = True
 
         sleep(3)
-        ecran.fill(blanc)
+        """ecran.fill(blanc)
         ecran.blit(texteJ2, [resolEcran[1] / 2, 50])
         ecran = plateau(ecran, resolEcran, grille, 2)
-        pygame.display.flip()
+        pygame.display.flip()"""
 #----------------Tour joueur 2--------------------
         while tourJoueur2:
-            for event in pygame.event.get():
+            """for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     tourJoueur=False
                     enCours=False
@@ -178,42 +179,42 @@ def main():
                         exit()
                 if event.type==pygame.MOUSEBUTTONDOWN:
                     joueur2PosX,joueur2PosY = pygame.mouse.get_pos()
+                    print(joueur2PosX,joueur2PosY)
                     if joueur2PosY>(coefMarge*resolEcran[1]):
                         joueur2PosX = joueur2PosX // (resolEcran[0] / 10)
                         test = joueur2PosY - (coefMarge * resolEcran[1])
                         joueur2PosY = (test // ((resolEcran[1] - (coefMarge * resolEcran[1])) / 10))
                         joueur2PosY = int(joueur2PosY)
                         joueur2PosX = int(joueur2PosX)
-
-                        outcome = boatHere(grille,joueur2,(joueur2PosX,joueur2PosY))
-                        if outcome == "opposite":
-                            bateaux[0] -= 1
-                            grille[joueur2PosY][joueur2PosX]=0
-                            ecran.fill(blanc)
-                            ecran.blit(texteTouche2, (resolEcran[1]/2, 50))
-                            ecran = plateau(ecran, resolEcran, grille, joueur2)
-                            pygame.display.flip()
-
-                        elif outcome=="same":
-                            bateaux[1] -= 1
-                            grille[joueur2PosY][joueur2PosX] = 0
-                            ecran.fill(blanc)
-                            ecran.blit(texteFail2,(resolEcran[1]/2, 50))
-                            ecran = plateau(ecran, resolEcran, grille, joueur2)
-                            pygame.display.flip()
-                        else:
-                            ecran.fill(blanc)
-                            ecran.blit(texteRien2, (resolEcran[1]/2, 50))
-                            ecran = plateau(ecran, resolEcran, grille, joueur2)
-                            pygame.display.flip()
-
-
-                        gagnant=someoneWon(bateaux)
-                        if gagnant!=None:
-                            tourJoueur2=False
-                        else:
-                            tourJoueur2 = False
-                            tourJoueur = True
+                        outcome = boatHere(grille,joueur2,(joueur2PosX,joueur2PosY))"""
+            joueur2PosX = randint(0,9)
+            joueur2PosY = randint(0,9)
+            outcome = boatHere(grille,joueur2,(joueur2PosX,joueur2PosY))
+            if outcome == "opposite":
+                bateaux[0] -= 1
+                grille[joueur2PosY][joueur2PosX]=0
+                ecran.fill(blanc)
+                ecran.blit(texteTouche2, (50,45))
+                ecran = plateau(ecran, resolEcran, grille, joueur1)
+                pygame.display.flip()
+            elif outcome=="same":
+                bateaux[1] -= 1
+                grille[joueur2PosY][joueur2PosX] = 0
+                ecran.fill(blanc)
+                ecran.blit(texteFail2,(50,45))
+                ecran = plateau(ecran, resolEcran, grille, joueur1)
+                pygame.display.flip()
+            else:
+                ecran.fill(blanc)
+                ecran.blit(texteRien2, (50,45))
+                ecran = plateau(ecran, resolEcran, grille, joueur1)
+                pygame.display.flip()
+            gagnant=someoneWon(bateaux)
+            if gagnant!=None:
+                tourJoueur2=False
+            else:
+                tourJoueur2 = False
+                tourJoueur = True
         sleep(2)
         if gagnant!=None:
             texteGagnant=arial_font.render((f"Le gagnant est le joueur {gagnant}"),True,noir)
